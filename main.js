@@ -30,6 +30,64 @@ app.post('/postData',(req,res)=>{
     )
 })
 
+app.get('/getData',(req,res)=>{
+    const select='SELECT * FROM node_table'
+    con.query(select,(err,result)=>{
+        if(err){
+            res.send(err)
+        }
+        else{
+            console.log(result)
+            res.send(result.rows) 
+        }
+    })
+})
+
+
+app.get('/getDataById/:id',(req,res)=>{
+    const id=req.params.id
+    const select='SELECT * FROM node_table WHERE id=$1'
+    con.query(select,[id],(err,result)=>{
+         if(err){
+            res.send(err)
+        }
+        else{
+            console.log(result)
+            res.send(result.rows[0]) 
+        }
+    })
+})
+
+
+app.put('/updateData/:id',(req,res)=>{
+    const id=req.params.id;
+    const name=req.body.name;
+    const update='UPDATE node_table SET name=$1 WHERE id=$2'
+    con.query(update,[name,id],(err,result)=>{
+        if(err){
+            res.send(err)
+        }
+        else{
+            console.log(result)
+            res.send("Data updated")
+        }
+    })
+})
+
+app.delete('/deleteData/:id',(req,res)=>{
+    const id=req.params.id;
+    const deleteData='DELETE FROM node_table WHERE id=$1'
+    con.query(deleteData,[id],(err,result)=>{
+        if(err){
+            res.send(err)
+        }
+        else{
+          
+            res.send(result)
+        }
+    })
+})
+
 app.listen(8080,()=>{
     console.log("server is running")
 })
